@@ -2,20 +2,20 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-EMAIL_ADDRESS = 'Haviv1idan@gmail.com'
-EMAIL_PASS = 'haviv5696'
-EMAIL_RECIEVER = 'Haviv1idan@gmail.com'
+EMAIL_ADDRESS = 'From Email'
+EMAIL_PASS = 'Your email password'
+EMAIL_RECIEVER = 'Reciever Email'
 
 with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
 
    smtp.login(EMAIL_ADDRESS, EMAIL_PASS)
 
    msg = EmailMessage()
-   msg['Subject'] = 'This is Idan Haviv spam'
+   msg['Subject'] = 'This is the subject'
    msg['From'] = EMAIL_ADDRESS
    msg['To'] = EMAIL_RECIEVER
 
-   msg.set_content('This is Idan mail')
+   msg.set_content('This is the email content')
 
    msg.add_alternative("""\
    <!DOCTYPE html>
