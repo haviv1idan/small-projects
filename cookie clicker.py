@@ -1,31 +1,41 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 
-PATH = "C:\Program Files (x86)\chromedriver.exe"
+PATH = "C:/Program Files (x86)/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
+
 website = "https://orteil.dashnet.org/cookieclicker/"
 driver.get(website)
-
-driver.implicitly_wait(5)
-
-cookie = driver.find_element_by_id("bigCookie")
-cookie_count = driver.find_element_by_id("cookies")
-items = [driver.find_element_by_id("productPrice" + str(i)) for i in range(1, -1, -1)]
-
 actions = ActionChains(driver)
-actions.click(cookie)
+big_cookie = driver.find_element(By.ID, "bigCookie")
+cookies = driver.find_element(By.ID, "cookies")
+
 
 while True:
-    actions.perform()
-    count = int(cookie_count.text.split(" ")[0])
-    for item in items:
-        value = int("".join(str(count).split(',')))
-        if value <= count:
-            upgrade_action = ActionChains(driver)
-            upgrade_action.move_to_element(item)
-            upgrade_action.click()
-            upgrade_action.perform()
+    products = []
+    # actions.move_to_element(big_cookie).click(big_cookie).perform()
+    big_cookie.click()
+    int_cookies = int(cookies.text.split()[0].replace(',', ''))
 
+    # Finds upgrades
+    upgrades = driver.find_elements(By.CLASS_NAME, "crate.upgrade.enabled")
+    for i, upgrade in enumerate(upgrades[::-1]):
+        print("index: {}, upgrade: {}".format(i, upgrade.text))
+        actions.click(upgrade).perform()
+        # upgrade.click()
+        int_cookies = int(cookies.text.split()[0].replace(',', ''))
 
-driver.close()
+    print("cookies: ", int_cookies)
+    # Find products
+    products = driver.find_elements(By.CLASS_NAME, "product.unlocked.enabled")
+    products = [p for p in products if len(p.text) > 0]
 
+    if products and int_cookies < int(products[-1].text.split()[1].replace(',', '')):
+        continue
+    else:
+        for i, product in enumerate(products[::-1]):
+            print("index: {}, product: {}".format(i, product.text))
+            actions.click(product).perform()
+            # product.click()
+            break
