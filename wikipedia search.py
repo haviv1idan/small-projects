@@ -17,5 +17,3 @@ for j in search(query, tld="co.in", num=10, stop=10, pause=2):
 
 if not flag:
 	print("There is not an result to this search")
-
-print("test")
