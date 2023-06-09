@@ -1,2 +1,2 @@
-# small-projects
-<b>just some projects that will help</b>
+# small python scripts
+<b>just some small python scripts that will help</b>
